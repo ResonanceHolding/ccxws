@@ -160,11 +160,11 @@ export class KucoinClient extends BasicClient {
 
             // Refresh token once a 23 hours, because public token
             // is only valid for a day.
-            const refreshInterval = 23 * 60 * 60 * 1000
+            const refreshInterval = 23 * 60 * 60 * 1000;
             setInterval(() => {
                 this._wss.close();
                 this._connectAsync();
-            }, refreshInterval)
+            }, refreshInterval);
         }
     }
 
@@ -231,7 +231,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendSubTicker(remote_id: string) {
-        this.tickers.add(remote_id)
+        this.tickers.add(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
@@ -244,7 +244,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendUnsubTicker(remote_id: string) {
-        this.tickers.delete(remote_id)
+        this.tickers.delete(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
@@ -257,7 +257,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendSubTrades(remote_id: string) {
-        this.trades.add(remote_id)
+        this.trades.add(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
@@ -270,7 +270,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendUnsubTrades(remote_id: string) {
-        this.tickers.delete(remote_id)
+        this.tickers.delete(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
@@ -283,7 +283,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendSubCandles(remote_id: string) {
-        this.candles.add(remote_id)
+        this.candles.add(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
@@ -296,7 +296,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendUnsubCandles(remote_id: string) {
-        this.candles.delete(remote_id)
+        this.candles.delete(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
@@ -311,7 +311,7 @@ export class KucoinClient extends BasicClient {
     protected _sendSubLevel2Updates(remote_id: string) {
         const market = this._level2UpdateSubs.get(remote_id);
         this._requestLevel2Snapshot(market);
-        this.level2.add(remote_id)
+        this.level2.add(remote_id);
 
         this._wss.send(
             JSON.stringify({
@@ -324,7 +324,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendUnsubLevel2Updates(remote_id: string) {
-        this.level2.delete(remote_id)
+        this.level2.delete(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
@@ -338,7 +338,7 @@ export class KucoinClient extends BasicClient {
     protected _sendSubLevel3Updates(remote_id: string) {
         const market = this._level3UpdateSubs.get(remote_id);
         this._requestLevel3Snapshot(market);
-        this.level3.add(remote_id)
+        this.level3.add(remote_id);
 
         this._wss.send(
             JSON.stringify({
@@ -351,7 +351,7 @@ export class KucoinClient extends BasicClient {
     }
 
     protected _sendUnsubLevel3Updates(remote_id: string) {
-        this.level3.delete(remote_id)
+        this.level3.delete(remote_id);
         this._wss.send(
             JSON.stringify({
                 id: new Date().getTime(),
