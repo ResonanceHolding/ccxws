@@ -54,6 +54,7 @@ import { PoloniexClient } from "./exchanges/PoloniexClient";
 import { UpbitClient } from "./exchanges/UpbitClient";
 import { ZbClient } from "./exchanges/ZbClient";
 import { MexcClient } from "./exchanges/MexcClient";
+import { WhiteBitClient } from "./exchanges/WhiteBitClient";
 
 export {
     //
@@ -120,6 +121,7 @@ export {
     OkexClient,
     PoloniexClient,
     UpbitClient,
+    WhiteBitClient,
     ZbClient,
 };
 
@@ -181,5 +183,6 @@ export default {
     OKEx: OkexClient,
     Poloniex: PoloniexClient,
     Upbit: UpbitClient,
+    WhiteBit: WhiteBitClient,
     Zb: ZbClient,
 };
