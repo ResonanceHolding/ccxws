@@ -32,6 +32,7 @@ import { BybitClient } from "./exchanges/BybitClient";
 import { CexClient } from "./exchanges/CexClient";
 import { CoinbaseProClient, CoinbaseProMultiClient } from "./exchanges/CoinbaseProClient";
 import { CoinexClient } from "./exchanges/CoinexClient";
+import { CryptoComClient } from "./exchanges/CryptoComClient";
 import { DeribitClient } from "./exchanges/DeribitClient";
 import { DigifinexClient } from "./exchanges/DigifinexClient";
 import { ErisXClient } from "./exchanges/ErisxClient";
@@ -98,6 +99,7 @@ export {
     CoinbaseProClient,
     CoinbaseProMultiClient,
     CoinexClient,
+    CryptoComClient,
     DeribitClient,
     DigifinexClient,
     ErisXClient,
@@ -156,6 +158,7 @@ export default {
         CoinbaseProMultiClient,
     },
     Coinex: CoinexClient,
+    CryptoCom: CryptoComClient,
     Deribit: DeribitClient,
     Digifinex: DigifinexClient,
     ErisX: ErisXClient,
