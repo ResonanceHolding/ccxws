@@ -27,29 +27,25 @@ export class CryptoComClient extends BasicClient {
 
     protected _sendSubTrades(remote_id: string) {
         this._wss.send(
-            JSON.stringify(
-                {
-                    id: 1,
-                    method: "subscribe",
-                    params: {
-                        channels: [`trade.${remote_id}`]
-                    }
-                }
-
-            ),
+            JSON.stringify({
+                id: 1,
+                method: "subscribe",
+                params: {
+                    channels: [`trade.${remote_id}`],
+                },
+            }),
         );
     }
 
     protected _sendUnsubTrades(remote_id: string) {
         this._wss.send(
-            JSON.stringify(
-                {
-                    id: 1,
-                    method: "unsubscribe",
-                    params: {
-                        channels: [`trade.${remote_id}`]
-                    }
-                }),
+            JSON.stringify({
+                id: 1,
+                method: "unsubscribe",
+                params: {
+                    channels: [`trade.${remote_id}`],
+                },
+            }),
         );
     }
 
@@ -59,8 +55,8 @@ export class CryptoComClient extends BasicClient {
                 id: 1,
                 method: "subscribe",
                 params: {
-                    channels: [`book.${remote_id}`]
-                }
+                    channels: [`book.${remote_id}`],
+                },
             }),
         );
     }
@@ -71,8 +67,8 @@ export class CryptoComClient extends BasicClient {
                 id: 1,
                 method: "unsubscribe",
                 params: {
-                    channels: [`book.${remote_id}`]
-                }
+                    channels: [`book.${remote_id}`],
+                },
             }),
         );
     }
@@ -91,23 +87,22 @@ export class CryptoComClient extends BasicClient {
         try {
             const msg = JSON.parse(raw);
 
-            if (msg.method === 'subscribe' && msg.result) {
+            if (msg.method === "subscribe" && msg.result) {
                 // trades
                 if (msg.result.channel === "trade") {
                     const market = this._tradeSubs.get(msg.result.instrument_name);
                     if (!market) return;
 
                     this._onDealUpdate(msg.result.data, market);
-                } else if (msg.result.channel === 'book') {
+                } else if (msg.result.channel === "book") {
                     const market = this._level2UpdateSubs.get(msg.result.instrument_name);
                     if (!market) return;
 
                     this._onLevel2Update(msg.result.data, market);
                 }
-            } else if (msg.method === 'public/heartbeat') {
+            } else if (msg.method === "public/heartbeat") {
                 this._onHeartbeat(msg.id);
             }
-
 
             // // l2updates
             // if (msg.channel === "push.depth") {
@@ -138,10 +133,12 @@ export class CryptoComClient extends BasicClient {
     }
 
     protected _onHeartbeat(id) {
-        this._wss.send(JSON.stringify({
-            id,
-            method: "public/respond-heartbeat"
-        }))
+        this._wss.send(
+            JSON.stringify({
+                id,
+                method: "public/respond-heartbeat",
+            }),
+        );
     }
 
     protected _onLevel2Update(data, market): void {
