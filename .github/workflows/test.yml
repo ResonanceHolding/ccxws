@@ -71,7 +71,7 @@ jobs:
           # - Deribit
           - Digifinex
           # - Ftx
-          № - FtxUs
+          # - FtxUs
           - Gateio
           # - Gemini
           - HitBtc
