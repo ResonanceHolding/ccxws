@@ -11,7 +11,7 @@ on:
 
 jobs:
   validate:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [16.x]
@@ -48,7 +48,7 @@ jobs:
 
   exchange:
     needs: [validate]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [16.x]
@@ -115,7 +115,7 @@ jobs:
 
   finish:
     needs: [validate, exchange]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
         uses: coverallsapp/github-action@master
