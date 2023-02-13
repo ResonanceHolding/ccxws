@@ -160,7 +160,7 @@ export class KucoinClient extends BasicClient {
 
             // Refresh token once a 23 hours, because public token
             // is only valid for a day.
-            const refreshInterval = 1 * 60 * 1000;
+            const refreshInterval = 5 * 60 * 1000;
             setInterval(() => {
                 this._connectAsync();
             }, refreshInterval);
@@ -196,13 +196,7 @@ export class KucoinClient extends BasicClient {
         this._wss.on("disconnected", this._onDisconnected.bind(this));
         this._wss.on("closing", this._onClosing.bind(this));
         this._wss.on("closed", this._onClosed.bind(this));
-        this._wss.on("message", msg => {
-            try {
-                this._onMessage(msg);
-            } catch (ex) {
-                this._onError(ex);
-            }
-        });
+        
         if (this._beforeConnect) this._beforeConnect();
         await this._wss.connect();
 
@@ -211,6 +205,14 @@ export class KucoinClient extends BasicClient {
         setTimeout(() => {
             if (wss && !!wss.close) {
                 wss.close();
+                console.log(new Date(), " - old connection closed");
+                this._wss.on("message", msg => {
+                    try {
+                        this._onMessage(msg);
+                    } catch (ex) {
+                        this._onError(ex);
+                    }
+                });
             }
         }, 5000);
     }
@@ -225,8 +227,17 @@ export class KucoinClient extends BasicClient {
         for (const trade of this.trades) {
             this._sendSubTrades(trade);
         }
-        for (const level2 of this.level2) {
-            this._sendSubLevel2Updates(level2);
+        for (const remote_id of this.level2) {
+            const market = this._level2UpdateSubs.get(remote_id);
+            this._requestLevel2Snapshot(market);
+        }
+        if (this.level2.size > 0) {
+            this._wss.send(JSON.stringify({
+                id: new Date().getTime(),
+                type: "subscribe",
+                topic: "/market/level2:" + [...this.level2].toString(),
+                response: true,
+            }));
         }
         for (const level3 of this.level3) {
             this._sendSubLevel3Updates(level3);
