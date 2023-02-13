@@ -160,9 +160,8 @@ export class KucoinClient extends BasicClient {
 
             // Refresh token once a 23 hours, because public token
             // is only valid for a day.
-            const refreshInterval = 23 * 60 * 60 * 1000;
+            const refreshInterval = 1 * 60 * 1000;
             setInterval(() => {
-                this._wss.close();
                 this._connectAsync();
             }, refreshInterval);
         }
@@ -187,6 +186,8 @@ export class KucoinClient extends BasicClient {
             }
         }
 
+        const wss = this._wss;
+
         // Construct a socket and bind all events
         this._wss = this._wssFactory(wssPath);
         this._wss.on("error", this._onError.bind(this));
@@ -206,6 +207,12 @@ export class KucoinClient extends BasicClient {
         await this._wss.connect();
 
         this._reconnect();
+
+        setTimeout(() => {
+            if (wss && !!wss.close) {
+                wss.close();
+            }
+        }, 5000);
     }
 
     protected _reconnect() {
