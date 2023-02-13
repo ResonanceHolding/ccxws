@@ -160,7 +160,7 @@ export class KucoinClient extends BasicClient {
 
             // Refresh token once a 23 hours, because public token
             // is only valid for a day.
-            const refreshInterval = 5 * 60 * 1000;
+            const refreshInterval = 15 * 60 * 1000;
             setInterval(() => {
                 this._connectAsync();
             }, refreshInterval);
