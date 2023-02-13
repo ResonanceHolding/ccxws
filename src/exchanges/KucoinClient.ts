@@ -635,8 +635,8 @@ export class KucoinClient extends BasicClient {
             const uri = `https://api.kucoin.com/api/v1/market/orderbook/level2_100?symbol=${remote_id}`;
             const raw: any = await https.get(uri);
 
-            const asks = raw.data.asks.map(p => new Level2Point(p[0], p[1]));
-            const bids = raw.data.bids.map(p => new Level2Point(p[0], p[1]));
+            const asks = raw.data.asks?.map(p => new Level2Point(p[0], p[1])) ?? [];
+            const bids = raw.data.bids?.map(p => new Level2Point(p[0], p[1])) ?? [];
             const snapshot = new Level2Snapshot({
                 exchange: "KuCoin",
                 sequenceId: Number(raw.data.sequence),
