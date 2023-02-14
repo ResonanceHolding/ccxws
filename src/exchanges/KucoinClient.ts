@@ -82,7 +82,7 @@ export class KucoinClient extends BasicClient {
     constructor({
         wssPath,
         watcherMs,
-        sendThrottleMs = 10,
+        sendThrottleMs = 100,
         restThrottleMs = 250,
         parent = null,
     }: KucoinClientOptions = {}) {
@@ -160,7 +160,7 @@ export class KucoinClient extends BasicClient {
 
             // Refresh token once a 23 hours, because public token
             // is only valid for a day.
-            const refreshInterval = 15 * 60 * 1000;
+            const refreshInterval = 1 * 60 * 1000;
             setInterval(() => {
                 this._connectAsync();
             }, refreshInterval);
@@ -209,10 +209,14 @@ export class KucoinClient extends BasicClient {
         if (this._beforeConnect) this._beforeConnect();
         await this._wss.connect();
 
-        this._reconnect();
+        /* if previous socket exists and was connected - it means we are
+         * reconnecting, so we need to reconnect to all topics
+         */
+        if (wss.isConnected)
+            this._reconnect();
 
         setTimeout(() => {
-            if (wss && !!wss.close) {
+            if (wss && !!wss.close && wss.isConnected) {
                 wss.close();
                 console.log(new Date(), " - old connection closed");
                 this._wss.on("message", msg => {
@@ -233,8 +237,18 @@ export class KucoinClient extends BasicClient {
         for (const candle of this.candles) {
             this._sendSubCandles(candle);
         }
-        for (const trade of this.trades) {
-            this._sendSubTrades(trade);
+        // for (const trade of this.trades) {
+        //     this._sendSubTrades(trade);
+        // }
+        if (this.trades.size > 0) {
+            for (let i = 0; i < this.trades.size / 100; i++) {
+                this._wss.send(JSON.stringify({
+                    id: new Date().getTime(),
+                    type: "subscribe",
+                    topic: "/market/match:" + [...this.trades].slice(i * 100, (i + 1) * 100).toString(),
+                    response: true,
+                }));
+            }
         }
         for (const remote_id of this.level2) {
             const market = this._level2UpdateSubs.get(remote_id);
