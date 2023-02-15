@@ -241,11 +241,11 @@ export class KucoinClient extends BasicClient {
         //     this._sendSubTrades(trade);
         // }
         if (this.trades.size > 0) {
-            for (let i = 0; i < this.trades.size / 100; i++) {
+            for (let i = 0; i < this.trades.size / 90; i++) {
                 this._wss.send(JSON.stringify({
                     id: new Date().getTime(),
                     type: "subscribe",
-                    topic: "/market/match:" + [...this.trades].slice(i * 100, (i + 1) * 100).toString(),
+                    topic: "/market/match:" + [...this.trades].slice(i * 90, (i + 1) * 90).toString(),
                     response: true,
                 }));
             }
