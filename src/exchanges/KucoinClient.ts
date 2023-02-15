@@ -230,7 +230,7 @@ export class KucoinClient extends BasicClient {
         }, 5000);
     }
 
-    protected _reconnect() {
+    protected async _reconnect() {
         for (const ticker of this.tickers) {
             this._sendSubTicker(ticker);
         }
@@ -240,14 +240,17 @@ export class KucoinClient extends BasicClient {
         // for (const trade of this.trades) {
         //     this._sendSubTrades(trade);
         // }
+        const delay = (n) => new Promise(resolve => setTimeout(resolve, n));
         if (this.trades.size > 0) {
-            for (let i = 0; i < this.trades.size / 90; i++) {
+            for (let i = 0; i < Math.ceil(this.trades.size / 90); i++) {
                 this._wss.send(JSON.stringify({
                     id: new Date().getTime(),
                     type: "subscribe",
                     topic: "/market/match:" + [...this.trades].slice(i * 90, (i + 1) * 90).toString(),
                     response: true,
                 }));
+
+                await delay(100);
             }
         }
         for (const remote_id of this.level2) {
