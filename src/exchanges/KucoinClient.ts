@@ -205,7 +205,7 @@ export class KucoinClient extends BasicClient {
                 console.log(new Date(), "reconnected");
                 this._reconnect(wss).then(() => {
                     wss.on("message", msg => {
-                        console.log(new Date(), msg);
+                        // console.log(new Date(), msg);
                         try {
                             this._onMessage(msg);
                         }
@@ -221,7 +221,7 @@ export class KucoinClient extends BasicClient {
             this._wss.on("connecting", this._onConnecting.bind(this));
             this._wss.on("connected", this._onConnected.bind(this));
             this._wss.on("message", msg => {
-                console.log(new Date(), msg);
+                // console.log(new Date(), msg);
                 try {
                     this._onMessage(msg);
                 }
